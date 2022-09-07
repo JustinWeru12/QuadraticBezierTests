@@ -93,6 +93,79 @@ class HeroCard extends StatelessWidget {
       ),
     );
   }
+    Widget actions() {
+    return IconButton(
+        icon: const Icon(Icons.filter_alt_rounded),
+        onPressed: () {
+          showGeneralDialog(
+            context: context,
+            barrierDismissible: true,
+            transitionDuration: const Duration(milliseconds: 500),
+            barrierLabel: MaterialLocalizations.of(context).dialogLabel,
+            barrierColor: Colors.black.withOpacity(0.5),
+            pageBuilder: (context, _, __) {
+              return StatefulBuilder(builder: (context, setState) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15)),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: kBackgroundColor,
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            const ListTile(
+                              title: Text(
+                                "Search & Filter",
+                                style: kTitleTextstyle,
+                              ),
+                            ),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              alignment: WrapAlignment.spaceEvenly,
+                              children: [
+                                filterItem("Name"),
+                                filterItem("Country"),
+                                filterItem("Sport"),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 4.0,
+                                width: Helper.setWidth(context, factor: 0.2),
+                                decoration: BoxDecoration(
+                                    color: kPrimaryColor,
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              });
+            },
+            transitionBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOut,
+                ).drive(Tween<Offset>(
+                  begin: const Offset(0, -1.0),
+                  end: Offset.zero,
+                )),
+                child: child,
+              );
+            },
+          );
+        });
+  }
 }
 
 class BackgroundClipper extends CustomClipper<Path> {
